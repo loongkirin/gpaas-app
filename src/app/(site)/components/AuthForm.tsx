@@ -3,8 +3,9 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/inputs/Input';
 import { useRouter } from 'next/navigation';
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
+import Captcha from '@/components/captcha/Captcha'
 
 type Variant = 'LOGIN' | 'REGISTER';
 
@@ -12,6 +13,7 @@ const AuthForm = () => {
     const[isLoading, setIsLoading] = useState(false);
     const[variant, setVariant] = useState<Variant>("LOGIN");
     const router = useRouter();
+    const cpatchaRef = useRef<HTMLInputElement>(null);
     const {
         register, 
         handleSubmit,
@@ -36,10 +38,11 @@ const AuthForm = () => {
 
       const onSubmit : SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true);
+        console.log("captcha value:", cpatchaRef.current?.value, cpatchaRef.current?.id);
         try {
             switch(variant) {
                 case "LOGIN":
-                    router.push("/home");
+                    // router.push("/");
                     break;
                 case "REGISTER":
                     break;
@@ -58,6 +61,7 @@ const AuthForm = () => {
                 {variant === "REGISTER" &&<Input id="name" label='Name' required={true} register={register} errors={errors} placeholder='Name' disabled={isLoading}/> }
                 <Input id="mobile" label='Mobile' required={true} register={register} errors={errors} placeholder='Mobile' disabled={isLoading}/>
                 <Input id="password" type="password" label='Password' required={true} register={register} errors={errors} placeholder='Password' disabled={isLoading}/>
+                <Captcha ref={cpatchaRef}/>
                 <div>
                     <Button disabled={isLoading} fullWidth type="submit">
                         {variant === "LOGIN" ? "Login" : "Register"}
