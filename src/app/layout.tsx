@@ -1,5 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import AuthContext from '@/context/AuthContext'
+import ToasterContext from '@/context/ToasterContext'
 
 export const metadata: Metadata = {
   title: 'GPaaS App',
@@ -13,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AuthContext>
+          <ToasterContext/>
+          {children}
+        </AuthContext>
+      </body>
     </html>
   )
 }

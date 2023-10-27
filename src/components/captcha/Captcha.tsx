@@ -15,9 +15,8 @@ const Captcha = React.forwardRef((props, ref: React.ForwardedRef<HTMLInputElemen
             focus:ring-inset focus-visible:outline-0"/>
             </div>
         )}
-        {errorMessage && <div>{errorMessage}</div>}
+        {errorMessage && <div onClick={() => fetchCaptcha()}>{errorMessage}, click to retry</div>}
         </>
-        
     );
 });
 

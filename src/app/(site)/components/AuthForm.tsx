@@ -5,7 +5,9 @@ import Input from '@/components/inputs/Input';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useRef, useState } from 'react'
 import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
-import Captcha from '@/components/captcha/Captcha'
+import { signIn } from 'next-auth/react';
+import Captcha from '@/components/captcha/Captcha';
+import axios from '@/lib/axios';
 
 type Variant = 'LOGIN' | 'REGISTER';
 
@@ -13,7 +15,7 @@ const AuthForm = () => {
     const[isLoading, setIsLoading] = useState(false);
     const[variant, setVariant] = useState<Variant>("LOGIN");
     const router = useRouter();
-    const cpatchaRef = useRef<HTMLInputElement>(null);
+    const captchaRef = useRef<HTMLInputElement>(null);
     const {
         register, 
         handleSubmit,
@@ -36,16 +38,32 @@ const AuthForm = () => {
         }
       },[variant]);
 
-      const onSubmit : SubmitHandler<FieldValues> = (data) => {
+      const onSubmit : SubmitHandler<FieldValues> = async (data) => {
         setIsLoading(true);
-        console.log("captcha value:", cpatchaRef.current?.value, cpatchaRef.current?.id);
+        console.log("captcha value:", captchaRef.current?.value, captchaRef.current?.id);
+        const captcha = captchaRef.current?.value;
+        const captcha_id = captchaRef.current?.id;
+        console.log(data);
         try {
             switch(variant) {
                 case "LOGIN":
+                  const c = { ...data, captcha, captcha_id, redirect: false }
+                  console.log(c);
+                  // axios.post("/auth/login", { ...c })
+                  const res = await signIn("credentials", { ...data, captcha, captcha_id, redirect: false })
+                  if (res?.error == null) {
+                    console.log("login success")
+                    // router.push("/")
+                  } else {
+                      console.log("Error occured while logging")
+                  }
                     // router.push("/");
-                    break;
+                  break;
                 case "REGISTER":
-                    break;
+                  const userData = { ...data, tenant_id: "1" }
+                  const re = await axios.post("/auth/register", userData);
+                  console.log(re);
+                  break;
             }
         } catch {
 
@@ -61,7 +79,7 @@ const AuthForm = () => {
                 {variant === "REGISTER" &&<Input id="name" label='Name' required={true} register={register} errors={errors} placeholder='Name' disabled={isLoading}/> }
                 <Input id="mobile" label='Mobile' required={true} register={register} errors={errors} placeholder='Mobile' disabled={isLoading}/>
                 <Input id="password" type="password" label='Password' required={true} register={register} errors={errors} placeholder='Password' disabled={isLoading}/>
-                <Captcha ref={cpatchaRef}/>
+                <Captcha ref={captchaRef}/>
                 <div>
                     <Button disabled={isLoading} fullWidth type="submit">
                         {variant === "LOGIN" ? "Login" : "Register"}

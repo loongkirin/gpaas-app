@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from '@/api/axios';
+import axios from '@/lib/axios';
 
 export interface CaptchaData{
     CaptchaId: string;
