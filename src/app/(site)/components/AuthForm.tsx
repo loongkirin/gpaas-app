@@ -8,6 +8,7 @@ import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import Captcha from '@/components/captcha/Captcha';
 import axios from '@/lib/axios';
+import toast from 'react-hot-toast';
 
 type Variant = 'LOGIN' | 'REGISTER';
 
@@ -60,6 +61,7 @@ const AuthForm = () => {
                     // router.push("/");
                   break;
                 case "REGISTER":
+                  toast.error("toast error test");
                   const userData = { ...data, tenant_id: "1" }
                   const re = await axios.post("/auth/register", userData);
                   console.log(re);
