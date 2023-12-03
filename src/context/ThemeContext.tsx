@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import useLocalStorageState from '@/hooks/useLocalStorageState';
 
 const ThemeContext = createContext<{
@@ -11,7 +11,7 @@ const ThemeContext = createContext<{
 }>({
     themeColor: "default",
     setThemeColor: () => {},
-    themeMode: "system",
+    themeMode: "light",
     setThemeMode: () => {},
 })
 
@@ -21,7 +21,21 @@ const ThemeContextProvider = ({
     children: React.ReactNode,
 }) => {
     const[themeColor, setThemeColor] = useLocalStorageState("default", "theme_color");
-    const[themeMode, setThemeMode ] = useLocalStorageState("system", "theme_mode");
+    const[themeMode, setThemeMode ] = useLocalStorageState("light", "theme_mode");
+
+    useEffect(() => {
+        let classNameList = [];
+        document.body.classList.forEach(x => {
+            if(!x.startsWith("theme-")) {
+                classNameList.push(x);
+            }
+        });
+        let themeClassName = "theme-" + themeColor + " theme-" + themeMode;
+        classNameList.push(themeClassName);
+        document.body.className = classNameList.join(" ");
+    },
+    [themeColor, themeMode]
+    );
 
     return (
         <ThemeContext.Provider value={{themeColor, setThemeColor, themeMode, setThemeMode}}>

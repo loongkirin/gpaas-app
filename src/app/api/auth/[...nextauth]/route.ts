@@ -29,47 +29,55 @@ export const authOptions: AuthOptions = {
         const res = await axios.post("http://localhost:8081/v1/auth/login", {
           ...credentials
         });
+        // console.log("login res:", res);
         const result = res.data;
         if (result.code !== 200) {
             return null;
         }
         const data = result.data;
-        const user : { user_id: string, user_name: string, mobile: string, access_token: string } = { ...data};
+        const user : { user_id: string, user_name: string, mobile: string, access_token: string } = { ...data.user, ...data };
+        // console.log("login user:", user);
         return user;
       }
     })
   ],
   callbacks: {
-    async signIn(params) {
-      if(!params) {
-        return "/auth/signin?status=fail"
-      }
-      return "/";
-    },
+    // async signIn(params) {
+    //   if(!params) {
+    //     return "/auth/signin?status=fail"
+    //   }
+    //   return "/";
+    // },
     //记住，它们的执行顺序是先 jwt 执行， 然后才是 session。
     async jwt(params) {
-        console.log("jwt function:", params);
-        const { token, user } = params
+        // console.log("jwt function params:", params);
+        const { token, user } = params;
+
+        // console.log("jwt function user: ", user, "  token:", token);
 
         if(user){
-            token.accessToken = user.access_token
-            token._id = user.user_id
+            token.accessToken = user?.access_token;
+            token._id = user.user_id;
+            token.user = user;
         }
+        // console.log("end jwt function token: ", token);
+
+        return token;
     },
     // 每次调用 getSession() 、useSession() 的时候 都会触发并将 token 存入 user 中
     async session(params) {
         // session.user.accessToken = token.accessToken
         // session.user.refreshToken = token.refreshToken
         // session.error = token.error // 用于处理token 失效
-        console.log("session function:", params)
-        const { session, user, token } = params;
+        console.log("session function params:", params);
+        const { session, token } = params;
         if(token){
-          session.user = user;
-          session.user.user_id = token._id
-          session.user.access_token = token.accessToken
+          session.user = token.user;
         }
 
-        return session
+        console.log("end session function session:", session)
+
+        return session;
     },
   },
   debug: process.env.NODE_ENV === 'development',

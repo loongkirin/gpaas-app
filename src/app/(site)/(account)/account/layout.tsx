@@ -8,7 +8,7 @@ const layout = ({
 }) => {
   return (
     <>
-      <div className={['bg-primaryBg flex flex-row w-full h-full gap-2']
+      <div className={['flex flex-row w-full h-full gap-2']
       .filter(Boolean).join(' ')}>
         <div className='basis-1/2 border-red-500 border-2'>
           <button  onClick={() => {

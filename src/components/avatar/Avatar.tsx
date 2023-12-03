@@ -6,7 +6,7 @@ const Avatar = ({
     children?: React.ReactNode,
 }) => {
   return (
-    <div className={`relative rounded-full overflow-hidden inline-block ring-2 ring-gray-300`}>
+    <div className={`relative rounded-full overflow-hidden inline-block ring-2 ring-primaryBg`}>
         {children}
     </div>
   )

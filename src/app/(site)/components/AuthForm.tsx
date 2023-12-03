@@ -25,7 +25,7 @@ const AuthForm = () => {
         }
       } = useForm<FieldValues>({
         defaultValues: {
-          name: '',
+          user_name: '',
           mobile: '',
           password: ''
         }
@@ -41,28 +41,32 @@ const AuthForm = () => {
 
       const onSubmit : SubmitHandler<FieldValues> = async (data) => {
         setIsLoading(true);
-        console.log("captcha value:", captchaRef.current?.value, captchaRef.current?.id);
         const captcha = captchaRef.current?.value;
         const captcha_id = captchaRef.current?.id;
-        console.log(data);
         try {
             switch(variant) {
                 case "LOGIN":
                   const c = { ...data, captcha, captcha_id, redirect: false }
-                  console.log(c);
+                  // console.log(c);
                   // axios.post("/auth/login", { ...c })
-                  const res = await signIn("credentials", { ...data, captcha, captcha_id, redirect: false })
+                  const res = await signIn("credentials", { ...data, captcha, captcha_id, redirect: false });
+                  // console.log("auth form:", res);
                   if (res?.error == null) {
                     console.log("login success")
-                    // router.push("/")
+                    router.push("/account/setting")
                   } else {
                       console.log("Error occured while logging")
                   }
                     // router.push("/");
                   break;
                 case "REGISTER":
-                  toast.error("toast error test");
-                  const userData = { ...data, tenant_id: "1" }
+                  // toast.error("toast error test");
+                  const user = { ...data };
+                  const tenant = {
+                    tenant_id: "1",
+                    tenant_name: "LongYan Software CO.,LTD",
+                  }
+                  const userData = { user, tenant }
                   const re = await axios.post("/auth/register", userData);
                   console.log(re);
                   break;
@@ -76,9 +80,9 @@ const AuthForm = () => {
 
   return (
     <div className='mt-4 mx-auto w-full max-w-md'>
-        <div className='bg-white rounded-lg shadow py-8 px-10'>
+        <div className='rounded-lg shadow py-8 px-10'>
             <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
-                {variant === "REGISTER" &&<Input id="name" label='Name' required={true} register={register} errors={errors} placeholder='Name' disabled={isLoading}/> }
+                {variant === "REGISTER" &&<Input id="user_name" label='Name' required={true} register={register} errors={errors} placeholder='Name' disabled={isLoading}/> }
                 <Input id="mobile" label='Mobile' required={true} register={register} errors={errors} placeholder='Mobile' disabled={isLoading}/>
                 <Input id="password" type="password" label='Password' required={true} register={register} errors={errors} placeholder='Password' disabled={isLoading}/>
                 <Captcha ref={captchaRef}/>
