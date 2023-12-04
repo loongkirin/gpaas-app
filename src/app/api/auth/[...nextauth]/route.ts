@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import axios from "@/lib/axios";
+import { LoginResponse } from "@/models/Account";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -22,22 +23,21 @@ export const authOptions: AuthOptions = {
         captcha: { label: "Captcha", type: "text", placeholder: "Captcha" },
         captcha_id:{ label: "CaptchaId", type: "text", placeholder: "CaptchaId" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials, request) {
         if (!credentials?.mobile || !credentials?.password) {
           throw new Error('Invalid credentials');
         }
-        const res = await axios.post("http://localhost:8081/v1/auth/login", {
+        const loginResponse = await axios.post("http://localhost:8081/v1/auth/login", {
           ...credentials
         });
         // console.log("login res:", res);
-        const result = res.data;
+        const result = loginResponse.data;
         if (result.code !== 200) {
             return null;
         }
-        const data = result.data;
-        const user : { user_id: string, user_name: string, mobile: string, access_token: string } = { ...data.user, ...data };
-        // console.log("login user:", user);
-        return user;
+        const data : LoginResponse = { ...result.data };
+        // console.log("login data:", data);
+        return data;
       }
     })
   ],
@@ -56,9 +56,10 @@ export const authOptions: AuthOptions = {
         // console.log("jwt function user: ", user, "  token:", token);
 
         if(user){
-            token.accessToken = user?.access_token;
-            token._id = user.user_id;
-            token.user = user;
+          token.access_token = user.access_token;
+          token.refresh_token = user.refresh_token;
+          token.id = user.user.user_id;
+          token.user = user;
         }
         // console.log("end jwt function token: ", token);
 
@@ -69,13 +70,15 @@ export const authOptions: AuthOptions = {
         // session.user.accessToken = token.accessToken
         // session.user.refreshToken = token.refreshToken
         // session.error = token.error // 用于处理token 失效
-        console.log("session function params:", params);
+        // console.log("session function params:", params);
         const { session, token } = params;
         if(token){
-          session.user = token.user;
+          session.user = token.user.user;
+          session.access_token = token.access_token;
+          session.refresh_token = token.refresh_token;
         }
 
-        console.log("end session function session:", session)
+        // console.log("end session function session:", session)
 
         return session;
     },
