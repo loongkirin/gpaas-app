@@ -1,3 +1,5 @@
+import { User as AuthUser } from "next-auth";
+
 export interface Tenant {
     tenant_id: string,
     tenant_name: string,
@@ -19,7 +21,7 @@ export interface Captcha {
     captcha: string,
 }
 
-export interface LoginResponse {
+export interface LoginResponse extends AuthUser {
     user: User,
     tenants: Tenant[],
     access_token: string,

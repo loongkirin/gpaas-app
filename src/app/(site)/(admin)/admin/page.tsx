@@ -6,14 +6,12 @@ import Link from 'next/link';
 
 const Setting = () => {
   const { data: session, status } = useSession();
-  
-  console.log("account session data:", session, " status:", status)
+  console.log("admin session data:", session, " status:", status)
   const dd = process.env.NEXTAUTH_SECRET;
-  console.log("account dd: ", dd);
-
+  console.log("admin dd: ", dd);
   return (
     <div>
-      <Link href={"/admin"}>Admin Setting</Link>
+      <Link href={"/account/setting"}>Account Setting</Link>
     </div>
   );
 }
