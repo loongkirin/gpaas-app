@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-const useLocalStorageState = (defaultValue: any, key: string) : [any, (v: any) => void] => {
+const useLocalStorageState = (key: any, defaultValue: string): [any, (v: any) => void] => {
   const [value, setValue] = useState<any>(defaultValue);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ const useLocalStorageState = (defaultValue: any, key: string) : [any, (v: any) =
       setValue(stickyValue);
     }
   }, [key, setValue]);
-  
+
   return [
     value,
     (v) => {

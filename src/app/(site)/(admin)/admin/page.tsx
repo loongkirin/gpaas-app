@@ -1,17 +1,17 @@
-'use client';
 
-import { useSession } from 'next-auth/react';
+import { authOptions } from '@/features/authentication/authOptions';
+import { getServerSession } from 'next-auth';
 import React from 'react';
-import Link from 'next/link';
 
-const Setting = () => {
-  const { data: session, status } = useSession();
-  console.log("admin session data:", session, " status:", status)
-  const dd = process.env.NEXTAUTH_SECRET;
-  console.log("admin dd: ", dd);
+const Setting = async () => {
+  let serverSessionData = await getServerSession(authOptions);
+  console.log("server session data:", serverSessionData);
+
+
+
   return (
     <div>
-      <Link href={"/account/setting"}>Account Setting</Link>
+      dfsdsf
     </div>
   );
 }

@@ -166,3 +166,7 @@ body,
   --onPrimaryBg: var(--color-primary-50);
   --primary: var(--color-primary-400);
 }
+
+.center {
+  @apply mx-auto
+}

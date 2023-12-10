@@ -1,4 +1,5 @@
 import axios from '@/lib/axios';
+import { getServerSession } from 'next-auth';
 // import getSession from '../services/getSession'
 
 import { getSession } from 'next-auth/react';
@@ -23,7 +24,8 @@ const fetchData = async (url: string) => {
 }
 
 const getAuthHeaders = async () => {
-  const session = await getSession();
+  const session = await getServerSession();
+  console.log("get auth headers session:", session);
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${session?.user?.email}` 

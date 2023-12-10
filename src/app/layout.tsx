@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import AuthContext from '@/context/AuthContext'
 import ToasterContext from '@/context/ToasterContext'
 import { ThemeContextProvider } from '@/context/ThemeContext'
+import { QueryContext } from '@/context/QueryContext'
 
 export const metadata: Metadata = {
   title: 'GPaaS App',
@@ -16,13 +17,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <ThemeContextProvider>
-          <AuthContext>
-            <ToasterContext/>
-            {children}
-          </AuthContext>
-        </ThemeContextProvider>
+      <body className='bg-primaryBg'>
+        <QueryContext>
+          <ThemeContextProvider>
+            <AuthContext>
+              <ToasterContext />
+              {children}
+            </AuthContext>
+          </ThemeContextProvider>
+        </QueryContext>
       </body>
     </html>
   )
