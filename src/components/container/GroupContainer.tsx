@@ -17,7 +17,7 @@ const GroupContainer = ({
           {groupTitle}
         </span>
       </div>
-      <Container className={`space-y-6 mb-2 -translate-y-1.5 !flex-col ${className}`}>
+      <Container className={`-translate-y-1.5 ${className}`}>
         {children}
       </Container>
     </div>

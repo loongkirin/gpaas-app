@@ -8,7 +8,8 @@ import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import Captcha from '@/components/captcha/Captcha';
 import Container from '@/components/container/Container';
-import AuthForm from '@/app/(site)/components/AuthForm';
+import LoadeSpinner from '@/components/spinner/Spinner';
+import LoadeSpinnerMini from '@/components/spinner/LoadeSpinnerMini';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +50,9 @@ const LoginForm = () => {
   return (
     <>
       <Container className=' items-center justify-center '>
-        {/* <LoadeSpinner/> */}
+        <LoadeSpinnerMini className='fill-green-600 w-12 h-12'>
+          <span>Processing......</span>
+        </LoadeSpinnerMini>
         <form className='space-y-6 py-8 px-10 mx-auto border-gray-400 shadow max-w-md rounded-lg' onSubmit={handleSubmit(onSubmit)}>
           <Input id="mobile" label='Mobile' required={true} register={register} errors={errors} placeholder='Mobile' disabled={isLoading} />
           <Input id="password" type="password" label='Password' required={true} register={register} errors={errors} placeholder='Password' disabled={isLoading} />
@@ -61,7 +64,6 @@ const LoginForm = () => {
           </div>
         </form>
       </Container>
-      {/* <AuthForm /> */}
     </>
   );
 }

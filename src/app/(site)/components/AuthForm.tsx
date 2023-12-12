@@ -9,7 +9,7 @@ import { signIn } from 'next-auth/react';
 import Captcha from '@/components/captcha/Captcha';
 import axios from '@/lib/axios';
 import toast from 'react-hot-toast';
-import LoadeSpinner from '@/components/loadspinner/LoadeSpinner';
+import LoadeSpinner from '@/components/spinner/Spinner';
 
 type Variant = 'LOGIN' | 'REGISTER';
 
