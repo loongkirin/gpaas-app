@@ -9,7 +9,7 @@ import { signIn } from 'next-auth/react';
 import Captcha from '@/components/captcha/Captcha';
 import Container from '@/components/container/Container';
 import LoadeSpinner from '@/components/spinner/Spinner';
-import LoadeSpinnerMini from '@/components/spinner/LoadeSpinnerMini';
+import LoadeSpinnerMini from '@/components/spinner/SpinnerMini';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
