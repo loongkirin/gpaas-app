@@ -2,7 +2,12 @@
 
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
+import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
+import { ComboBox, ComboBoxItem } from "@/components/ui/Combobox";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from "@/components/ui/Command";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/Dialog";
+import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover";
 import { Separator } from "@/components/ui/Separator";
@@ -12,6 +17,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { ToastAction } from "@/components/ui/Toast";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/Tooltip";
 import { useToast } from "@/hooks/use-toast";
+import { Calculator, Calendar, CreditCard, Settings, Smile, User } from "lucide-react";
+
+const frameworks : ComboBoxItem[] = [
+  {
+    value: "next.js",
+    label: "Next.js",
+  },
+  {
+    value: "sveltekit",
+    label: "SvelteKit",
+  },
+  {
+    value: "nuxt.js",
+    label: "Nuxt.js",
+  },
+  {
+    value: "remix",
+    label: "Remix",
+  },
+  {
+    value: "astro",
+    label: "Astro",
+  },
+]
 
 export default function Home() {
   const { toast } = useToast()
@@ -235,6 +264,84 @@ export default function Home() {
           <Skeleton className="h-4 w-[200px]" />
         </div>
       </div>
+      <Separator/>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Edit Profile</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit profile</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="name"
+                defaultValue="Pedro Duarte"
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="username" className="text-right">
+                Username
+              </Label>
+              <Input
+                id="username"
+                defaultValue="@peduarte"
+                className="col-span-3"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Command className="rounded-lg border shadow-md md:min-w-[450px]">
+        <CommandInput placeholder="Type a command or search..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Suggestions">
+            <CommandItem>
+              <Calendar />
+              <span>Calendar</span>
+            </CommandItem>
+            <CommandItem>
+              <Smile />
+              <span>Search Emoji</span>
+            </CommandItem>
+            <CommandItem disabled>
+              <Calculator />
+              <span>Calculator</span>
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Settings">
+            <CommandItem>
+              <User />
+              <span>Profile</span>
+              <CommandShortcut>⌘P</CommandShortcut>
+            </CommandItem>
+            <CommandItem>
+              <CreditCard />
+              <span>Billing</span>
+              <CommandShortcut>⌘B</CommandShortcut>
+            </CommandItem>
+            <CommandItem>
+              <Settings />
+              <span>Settings</span>
+              <CommandShortcut>⌘S</CommandShortcut>
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
+      <ComboBox comboboxItems={frameworks} selectPlaceholder="Select a framework"/>
     </div>
   );
 }
